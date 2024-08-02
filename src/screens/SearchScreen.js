@@ -59,16 +59,18 @@ export default function SearchScreen() {
       {currentWeather ? (
         <div
           style={{
-            // height: 200,
-            width: 200,
             boxShadow: "1px 1px 10px 1px grey",
             marginTop: 64,
             borderRadius: 16,
             flexDirection: "column",
             padding: 16,
+            minWidth: 200,
           }}
           onClick={() => {
-            navigate("/", { state: { city }, replace: true });
+            navigate("/", {
+              state: { city: currentWeather?.location?.name },
+              replace: true,
+            });
           }}
         >
           <div
@@ -110,8 +112,9 @@ export default function SearchScreen() {
               justifyContent: "space-between",
             }}
           >
+            <img src={currentWeather?.current?.condition?.icon} alt="Weather" />
             <p
-              style={{ fontSize: 16 }}
+              style={{ fontSize: 16, width: "60%", textAlign: "right" }}
             >{`${currentWeather?.current?.condition?.text}`}</p>
           </div>
         </div>

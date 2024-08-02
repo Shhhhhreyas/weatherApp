@@ -97,14 +97,7 @@ export default function HomeScreen() {
                 <h1>{city}</h1>
                 <h3>{new Date().toDateString()}</h3>
               </div>
-              <FilterDramaIcon
-                style={{
-                  alignSelf: "center",
-                  height: 80,
-                  fontSize: 100,
-                }}
-                color="#fff"
-              />
+              <img src={currentWeather.condition?.icon} alt="Weather" />
             </div>
           </div>
         </div>
@@ -120,6 +113,8 @@ export default function HomeScreen() {
             flexDirection: "column",
             width: "30%",
             backgroundColor: "#0005",
+            scrollBehavior: "auto",
+            overflow: "scroll",
           }}
         >
           <h4 style={{ color: "#fff" }}>Current Weather Details</h4>
@@ -167,24 +162,15 @@ export default function HomeScreen() {
           />
           <div>
             <h4 style={{ color: "#fff" }}>Hourly Forecast</h4>
-            <TwoDetailsVariant
-              text1={
-                forecast?.forecastday?.[0]?.hour?.[0]?.time?.split(" ")?.[1]
-              }
-              text2={`${forecast?.forecastday?.[0]?.hour?.[0]?.temp_c}°`}
-              text3={forecast?.forecastday?.[0]?.hour?.[0]?.condition?.text}
-              Icon={AcUnitIcon}
-              iconColor={"#fff"}
-            />
-            <TwoDetailsVariant
-              text1={
-                forecast?.forecastday?.[0]?.hour?.[1]?.time?.split(" ")?.[1]
-              }
-              text2={`${forecast?.forecastday?.[0]?.hour?.[1]?.temp_c}°`}
-              text3={forecast?.forecastday?.[0]?.hour?.[1]?.condition?.text}
-              Icon={AcUnitIcon}
-              iconColor={"#fff"}
-            />
+            {forecast?.forecastday?.[0]?.hour.map((hour) => (
+              <TwoDetailsVariant
+                text1={hour?.time?.split(" ")?.[1]}
+                text2={`${hour?.temp_c}°`}
+                text3={hour?.condition?.text}
+                Icon={AcUnitIcon}
+                iconColor={"#fff"}
+              />
+            ))}
           </div>
           <div
             style={{
@@ -197,6 +183,15 @@ export default function HomeScreen() {
           />
           <div>
             <h4 style={{ color: "#fff" }}>5 Day Forecast</h4>
+            {forecast?.forecastday?.map((day) => (
+              <TwoDetailsVariant
+                text1={day.date}
+                text2={`${day?.day?.avgtemp_c}°`}
+                text3={day?.day?.condition?.text}
+                Icon={AcUnitIcon}
+                iconColor={"#fff"}
+              />
+            ))}
           </div>
         </div>
       </div>
