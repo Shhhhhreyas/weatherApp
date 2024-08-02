@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Background from "../assets/homescreenBg.jpg";
 import { Button } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
@@ -11,21 +11,24 @@ import TwoDetails from "../components/TwoDetails";
 import TwoDetailsVariant from "../components/TwoDetailsVariant";
 import getCurrentWeather from "../utils/getCurrentWeather";
 import getHourlyForecast from "../utils/hourlyForecast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function HomeScreen() {
   const [currentWeather, setCurrentWeather] = useState({});
   const [forecast, setForecast] = useState();
   const navigate = useNavigate();
+  const location = useLocation();
+  const city = useMemo(() => location.state?.city || "Indore", [location]);
+
   useEffect(() => {
-    getCurrentWeather({ location: "Indore" }).then((data) =>
-      setCurrentWeather(data)
+    getCurrentWeather({ location: city }).then((data) =>
+      setCurrentWeather(data.current)
     );
-    getHourlyForecast({ location: "Indore" }).then((data) => {
-      setForecast(data);
+    getHourlyForecast({ location: city }).then((data) => {
+      setForecast(data.forecast);
     });
-  }, []);
-  console.log("forecast: ", forecast);
+  }, [city]);
+
   return (
     <>
       <div
@@ -91,7 +94,7 @@ export default function HomeScreen() {
                   marginLeft: 32,
                 }}
               >
-                <h1>Indore</h1>
+                <h1>{city}</h1>
                 <h3>{new Date().toDateString()}</h3>
               </div>
               <FilterDramaIcon

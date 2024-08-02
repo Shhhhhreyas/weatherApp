@@ -7,8 +7,7 @@ const getCurrentweather = ({ location = "Indore" }) => {
         `http://api.weatherapi.com/v1/current.json?key=74ad76686c48420888865816240208&q=${location}&aqi=no`
       )
       .then((resp) => {
-        console.log("resp: ", resp.data);
-        resolve(resp.data.current);
+        resolve(resp.data);
       })
       .catch((error) => reject(error));
   });
